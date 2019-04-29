@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<!--
+			TO DO: Self-Guided follow-up after class
+			See if you can add the meta tags, touch icon, and startup screen,
+			just like we did in Color Clock.
+		-->
+
+		<!--jquery mobile css/js in directories...-->
+		<link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+		<!--...our simple app css is inline-->
+		<style>
+			/*style input buttons: parens and operators*/
+			.ui-btn {
+				margin:.25em !important;
+			}
+			/*style command buttons*/
+			.command {
+				width:150px !important;
+				height:40px !important;
+			}
+			.hidden {
+				display:none;
+			}
+		</style>
+		
+		<!--jquery mobile js-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.mobile-1.4.5.min.js"></script>
+
+		
+		<!--page js-->
+		<script>
+			
+			//when entire doc is ready
+			$(document).ready(function(){
+				//set home button to currently active state
+		        $("#homeNavBtn").addClass("ui-btn-active");
+		        
+		        //we have three screens: intro/logo/splash; game play; and outro/about us/credits. We have one button for each inside a tab bar at the bottom of the screen.
+		        //add click event handler for the play button that's on the home screen
+		        $("#playFromHome").click(function(){
+		        	//when play button is clicked, use code to update the tab bar also, and in the same way it would update itself if you clicked on it instead: set the second tab (play screen) to active (remember zero-based arrays) and add/remove the button classes, too: play = active, home = in active
+					$("#tabs").tabs( "option", "active", 1 );
+		            $("#playNavBtn").addClass("ui-btn-active");
+		            $("#homeNavBtn").removeClass("ui-btn-active");
+				});
+		        
+		        
+				//build fortunes array
+                var fortunes = [
+                    "fortune0",
+                    "fortune1",
+                    "fortune2",
+                    "fortune3",
+                    "fortune4"
+                ]
+
+                //create variable for past index to avoid choosing the same fortune twice in a row
+                var pastIndx = 0;
+                //create variable for new index
+                var indx = 0;
+                
+                $("#tellFortune").on('click', function() {
+                	//every time the new index is the same as the old index...
+                    while (indx == pastIndx) {
+                    	//pic an new indix. round DOWN the number that comes from a random number, between 0 and 1, times the number of fortunes in your array
+                        indx = Math.floor(Math.random()*fortunes.length);
+                    }
+                    //store the picked index in the old index variable for future comparison
+                    pastIndx = indx;
+                    //put fortune in container
+                    $("#fortune").html(fortunes[indx]);
+                    //show container
+                    $(".fortuneContainer").show();
+                });
+
+			});
+		</script>
+	</head>
+	<body>
+
+		<!--tabs...-->
+		<div data-role="tabs" id="tabs">
+			<!--...in navbar, in footer, fixed to bottom of screen-->
+			<div data-role="footer" data-position="fixed" style="position:fixed;bottom:0;">
+				<div data-role="navbar">
+					<!--each tab has href to match content div id-->
+					<!--jquery mobile icons to simulate app tabbard-->
+					<ul>
+						<li><a href="#homeScreen" id="homeNavBtn" data-icon="home">Home</a>
+						</li>
+						<li><a href="#playScreen" id="playNavBtn" data-icon="star">Play</a>
+						</li>
+						<li><a href="#aboutScreen" data-icon="info">About</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			
+			<!--intro screen content-->
+			<div id="homeScreen" class="ui-content">
+				<h3>HOME SCREEN</h3>
+				<button id="playFromHome" class="ui-btn ui-btn-inline command">Play</button>
+			</div>
+			
+			<!--game screen content-->
+			<div id="playScreen" class="ui-content">
+				<h3>PLAY SCREEN</h3>
+        		
+        		<button id="tellFortune" class="ui-btn ui-btn-inline command">Tell Fortune</button>
+
+        		<div class="ui-body ui-body-a ui-corner-all fortuneContainer hidden">
+					<h3>Your Fortune</h3>
+					<p id="fortune"></p>
+				</div>
+				
+			</div>
+			
+			<!--about screen content-->
+			<div id="aboutScreen" class="ui-content">
+				<h3>ABOUT SCREEN</h3>
+			</div>
+			
+		</div>
+		
+	</body>
+</html>
